@@ -1,0 +1,88 @@
+--PART A#1
+set serveroutput on
+begin
+dbms_output.put_line('Hello World');
+end;
+
+--PART A#2
+set serveroutput on
+declare 
+v_today DATE := sysdate;
+v_tomorrow v_today%TYPE;
+begin
+v_tomorrow:= v_today+1;
+dbms_output.put_line('Hello World');
+dbms_output.put_line('Today''s date ' || v_today);
+dbms_output.put_line('Tomorrow''s date ' || v_tomorrow);
+end;
+
+--PART A#3
+set serveroutput on
+variable b_basic_percent number;
+variable b_pf_percent number;
+declare 
+v_today DATE := sysdate;
+v_tomorrow v_today%TYPE;
+begin
+:b_basic_percent :=45;
+:b_pf_percent := 12;
+v_tomorrow:= v_today+1;
+dbms_output.put_line('Hello World');
+dbms_output.put_line('Today''s date ' || v_today);
+dbms_output.put_line('Tomorrow''s date ' || v_tomorrow);
+end;
+/
+print b_basic_percent;
+print b_pf_percent;
+
+--PART A#4
+declare 
+v_first_name varchar2(20);
+v_last_name varchar2(20);
+n_employee_id number;
+d_hire_date DATE;
+begin
+null;
+end;
+
+declare 
+v_first_name hr.employees.first_name%TYPE;
+v_last_name hr.employees.last_name%TYPE;
+n_employee_id hr.employees.employee_id%TYPE;
+d_hire_date hr.employees.hire_date%TYPE;
+begin
+null;
+end;
+
+--PART A#5
+declare 
+v_first_name hr.employees.first_name%TYPE;
+v_last_name hr.employees.last_name%TYPE;
+n_employee_id hr.employees.employee_id%TYPE;
+d_hire_date hr.employees.hire_date%TYPE;
+begin
+v_first_name := 'Sean';
+v_last_name := 'Jones';
+d_hire_date := to_date('19900503', 'yyyymmdd');
+end;
+/
+
+--PART A#6
+set serveroutput on size 1000000;
+declare 
+v_first_name hr.employees.first_name%TYPE;
+v_last_name hr.employees.last_name%TYPE;
+n_employee_id hr.employees.employee_id%TYPE;
+d_hire_date hr.employees.hire_date%TYPE;
+begin
+select 
+employee_id, first_name, last_name, hire_date
+into 
+n_employee_id, v_first_name, v_last_name, d_hire_date
+from hr.employees
+where employee_id = 200;
+dbms_output.put_line(v_first_name);
+dbms_output.put_line(v_last_name);
+dbms_output.put_line(d_hire_date);
+end;
+/

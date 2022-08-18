@@ -1,0 +1,89 @@
+--PART E #1
+create user LabAc identified by 123
+default tablespace users
+quota unlimited on users
+temporary tablespace temp
+profile default
+account unlock
+password expire;
+
+--PART E #2
+select * from DATABASE_PROPERTIES
+
+--PART E #3
+grant insert, update, select on hr.employees to LabAc;
+
+--PART E #4
+grant select on hr.departments to public;
+
+--PART E #5
+grant select on hr.departments to LabAc with grant option;
+
+--PART E #6
+create user Demo identified by any
+default tablespace users
+quota unlimited on users
+temporary tablespace temp
+profile default
+password expire
+account unlock;
+
+
+--PART E #7
+
+select * from V$DATABASE_PROPERTIES;
+
+select PROPERTY_VALUE from DATABASE_PROPERTIES
+where PROPERTY_NAME in ('DEFAULT_PERMANENT_TABLESPACE','DEFAULT_TEMP_TABLESPACE');
+
+--PART E #8
+grant select on hr.employees to Demo;
+
+--PART E #9
+grant update (department_name, location_id) on hr.departments to Demo;
+
+--PART E #10
+grant select, insert on hr.employees to Demo with grant option;
+
+--PART E #11
+grant create session, create table, create sequence, create view to Demo;
+
+--PART E #12
+revoke select, insert on hr.employees from Demo;
+
+--PART E #13
+revoke create session, create table, create sequence, create view from Demo;
+
+--PART E #14
+create role DemoRole;
+
+--PART E #15
+grant create table, create view, create any index to DemoRole;
+
+--PART E #16
+grant DemoRole to LabAc, Demo;
+
+--PART E #17
+alter user Demo identified by dbany;
+
+--PART E #18
+create profile custprofile limit
+failed_login_attempts 8
+password_lock_time 3
+password_life_time 90;
+
+--PART E #19
+alter user Demo profile custprofile;
+
+--PART E #20
+connect Demo/dbany;
+
+grant create session to Demo;
+
+connect Demo/dbany;
+
+connect system/oracle as sysdba;
+
+select * from hr.employees
+where employee_id = 115;
+

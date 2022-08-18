@@ -1,0 +1,69 @@
+--PART D #1A
+create or replace procedure check_salary(
+p_the_job varchar2,
+p_the_salary number)
+is
+v_minsal hr.jobs.min_salary%TYPE;
+v_maxsal hr.jobs.max_salary%TYPE;
+begin
+select min_salary, max_salary
+into v_minsal, v_maxsal
+from hr.jobs
+where job_id = UPPER(p_the_job);
+if(p_the_salary not between v_minsal and v_maxsal) then
+RAISE_APPLICATION_ERROR
+(-20100, 'Invalid salary $'|| p_the_salary || ' . Salaries for job ' || p_the_job ||
+'must be between $' || v_minsal ||' and $' || v_maxsal);
+end if;
+end;
+/
+show errors;
+
+
+--PART D #1b
+create or replace trigger check_salary_trg
+before insert or update of job_id, salary on 
+hr.employees for each row
+begin
+check_salary(:new.job_id, :new.salary);
+end;
+/
+
+--PART D #2
+create or replace package emp_pkg as 
+procedure add_employee(p_first_name in hr.employees.first_name%TYPE, p_last_name in 
+hr.employees.last_name%TYPE, p_department_id in hr.employees.department_id%TYPE);
+end emp_pkg;
+/
+show errors
+
+create or replace package body emp_pkg is
+procedure add_employee(p_first_name in hr.employees.first_name%TYPE, p_last_name in 
+hr.employees.last_name%TYPE, p_department_id in hr.employees.department_id%TYPE) 
+is
+begin
+insert into 
+hr.employees(first_name, last_name, department_id)
+values 
+(p_first_name, p_last_name, p_department_id);
+commit;
+end add_employee;
+end emp_pkg;
+
+execute emp_pkg.add_employee('Eleanor', 'Beh', 30);
+
+--PART D #2b
+update hr.employees
+set salary = 2000
+where employee_id = 115;
+
+update hr.employees
+set job_id = 'HR_REP'
+where employee_id = 115;
+
+--PART D #2c
+update hr.employees
+set salary = 2800
+where employee_id = 115;
+
+

@@ -1,0 +1,62 @@
+--PART C #1a
+create or replace package job_pkg is 
+procedure add_job(p_jobid hr.jobs.job_id%TYPE, p_jobtitle hr.jobs.job_title%TYPE);
+procedure del_job(p_jobid hr.jobs.job_id%TYPE);
+function get_job(p_jobid hr.jobs.job_id%TYPE) return hr.jobs.job_title%TYPE;
+procedure upd_job(p_jobid in hr.jobs.job_id%TYPE, p_jobtitle in hr.jobs.job_title%TYPE);
+end job_pkg;
+/
+show errors;
+
+--PART C #1b
+create or replace package body job_pkg is 
+
+procedure add_job(p_jobid hr.jobs.job_id%TYPE, p_jobtitle hr.jobs.job_title%TYPE)
+is 
+begin 
+insert into hr.jobs(job_id, job_title)
+values (p_jobid, p_jobtitle);
+commit;
+end add_job;
+
+procedure del_job(p_jobid hr.jobs.job_id%TYPE) is 
+begin 
+delete from hr.jobs
+where job_id = p_jobid;
+if sql%NOTFOUND then
+RAISE_APPLICATION_ERROR(-20203, 'No jobs deleted');
+end if;
+end del_job;
+
+function get_job(p_jobid hr.jobs.job_id%TYPE) 
+return hr.jobs.job_title%TYPE
+is 
+v_title hr.jobs.job_title%TYPE;
+begin
+select job_title
+into v_title from hr.jobs
+where job_id = p_jobid;
+return v_title;
+end get_job;
+
+procedure upd_job(p_jobid in hr.jobs.job_id%TYPE, p_jobtitle in hr.jobs.job_title%TYPE)
+is 
+begin 
+update hr.jobs
+set job_title = p_jobtitle
+where job_id = p_jobid;
+if sql%NOTFOUND then
+RAISE_APPLICATION_ERROR(-20202, 'No jobs updated');
+end if;
+end upd_job;
+
+end job_pkg;
+/
+
+--PART C #1d
+execute job_pkg.add_job('IT_SYSAN', 'Systems Analyst');
+
+--PART C #1e
+select * from hr.jobs
+where job_id = 'IT_SYSAN';
+

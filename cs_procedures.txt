@@ -1,0 +1,17 @@
+--PART B #1
+create or replace procedure add_job(
+p_jobid hr.jobs.job_id%TYPE, p_jobtitle hr.jobs.job_title%TYPE)
+is
+begin 
+insert into hr.jobs(job_id, job_title)
+values (p_jobid, p_jobtitle);
+commit;
+end add_job;
+/
+
+execute add_job('IT_DBA', 'Database Administrator');
+
+select * from hr.jobs
+where job_id = ('IT_DBA');
+
+execute add_job('ST_MAN', 'Stock Manager');
